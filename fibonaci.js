@@ -1,4 +1,12 @@
+let B=[1,2,3,4,5];
+let A=[];
+let x;
 let n;
+for(let i=0;i<B.length;i++){
+    n=B[i];
+    fibonaci(n);
+    A[i]=x;
+}
 function fibonaci(n) {
     if(n===0){
         return x=0;
@@ -10,4 +18,4 @@ function fibonaci(n) {
         return x;
     }
 }
-console.log(fibonaci(n));
+console.log(A);
