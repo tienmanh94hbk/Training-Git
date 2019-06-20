@@ -95,8 +95,7 @@ inner join employee_on_project ep
 on ep.employee_id = e.employee_id
 inner join project
 on ep.project_id = project.project_id
-group by ep.project_id
-having project.project_name = 'Universal' OR project.project_name = 'Mayo' 
+where project.project_name = 'Universal' OR project.project_name = 'Mayo' 
 order by region;
 
 15/
