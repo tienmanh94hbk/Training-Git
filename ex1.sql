@@ -49,7 +49,7 @@ group by region;
 select *  
 from employee  
 where role!='MANAGER'  
-oder by role;
+order by role;
 
 9/
 SELECT employee.employee_name  
@@ -76,12 +76,13 @@ ON employee.employee_id = employee_on_project.employee_id
 GROUP BY employee_on_project.project_id;
 
 12/
-SELECT employee_name,project_name
+SELECT employee_name,group_concat(project_name)
 FROM ((employee e
 INNER JOIN employee_on_project ep
 ON e.employee_id = ep.employee_id)
 INNER JOIN project p
-ON p.project_id = ep.project_id);
+ON p.project_id = ep.project_id)
+Group by employee_name;
 
 14/
 select region ,employee_name,project_name,province_name,(case
@@ -96,6 +97,7 @@ on ep.employee_id = e.employee_id
 inner join project
 on ep.project_id = project.project_id
 where project.project_name = 'Universal' OR project.project_name = 'Mayo' 
+group by province_name
 order by region;
 
 15/
@@ -108,22 +110,26 @@ order by age;
 16/
 select employee_name, age
 from employee
-where age>30;
+where age>30;gro
 
 17/
-select p.project_name, (max(age)-min(age)) diff 
-from employee e 
-inner join employee_on_project ep 
-on ep.employee_id = e.employee_id 
-left join project p 
-on p.project_id = ep.project_id 
-group by ep.project_id  
-order by diff DESC 
-limit 1;
-
+select result.project_name
+	from (select p.project_name,e.employee_name,MAX(age) - MIN(age) as difference
+			from employee as e
+			inner join employee_on_project ep
+			on e.employee_id = ep.employee_id
+			inner join project p
+			on ep.project_id = p.project_id
+			group by p.project_id) as result
+	where result.difference = (select max(total.difference)
+								from (select project_id,max(age)-min(age) difference 
+										from employee e
+										inner join employee_on_project ep
+										on e.employee_id = ep.employee_id
+										group by ep.project_id) total);
 18/
-select e.employee_name
+select e.employee_name, project_id
 from employee as e
-inner join employee_on_project as ep
+left join employee_on_project as ep
 on e.employee_id = ep.employee_id
-where ep.project_id='';
+where project_id IS null
