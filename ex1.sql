@@ -110,7 +110,7 @@ order by age;
 16/
 select employee_name, age
 from employee
-where age>30;gro
+where age>30;
 
 17/
 select result.project_name
